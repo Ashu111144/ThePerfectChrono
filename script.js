@@ -1244,13 +1244,17 @@ function setupWheelInteractions() {
         let startY = 0;
         let isPointerDown = false;
         let accumulatedDrag = 0;
+        let hasDragged = false;
         const DRAG_THRESHOLD = 18;
 
         slot.addEventListener('pointerdown', (e) => {
             isPointerDown = true;
+            hasDragged = false;
             startY = e.clientY;
             accumulatedDrag = 0;
-            slot.setPointerCapture(e.pointerId);
+            try {
+                slot.setPointerCapture(e.pointerId);
+            } catch (_) {}
         });
 
         slot.addEventListener('pointermove', (e) => {
@@ -1260,6 +1264,7 @@ function setupWheelInteractions() {
             startY = e.clientY;
 
             if (Math.abs(accumulatedDrag) >= DRAG_THRESHOLD) {
+                hasDragged = true;
                 const stepDir = accumulatedDrag > 0 ? -1 : 1;
                 stepWheel(type, stepDir);
                 accumulatedDrag = 0;
@@ -1276,6 +1281,14 @@ function setupWheelInteractions() {
 
         slot.addEventListener('pointerup', endDrag);
         slot.addEventListener('pointercancel', endDrag);
+
+        slot.addEventListener('click', (e) => {
+            if (hasDragged) {
+                e.stopPropagation();
+                e.preventDefault();
+                hasDragged = false;
+            }
+        }, true);
 
         // Keyboard arrow navigation
         slot.addEventListener('keydown', (e) => {

@@ -146,7 +146,7 @@ body {
    ======================================================== */
 .watch-chassis {
     width: 100%;
-    max-width: min(840px, 96vw);
+    max-width: min(880px, 96vw);
     height: 100%;
     max-height: 100dvh;
     background-color: var(--chassis-bg);
@@ -294,8 +294,8 @@ body {
     flex: 1;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-md);
+    justify-content: center;
+    gap: clamp(12px, 2vh, 22px);
     background-color: var(--panel-bg);
     border: 1px solid var(--panel-border);
     border-radius: 12px;
@@ -312,8 +312,8 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-lg);
+    justify-content: center;
+    gap: clamp(20px, 4vw, 44px);
     flex: 1;
     min-height: 0;
 }
@@ -324,8 +324,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-sm);
-    flex: 1;
+    gap: clamp(6px, 1.2vw, 10px);
+    flex-shrink: 0;
     min-height: 0;
 }
 
@@ -333,7 +333,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: var(--space-sm);
+    gap: clamp(6px, 1.2vw, 10px);
 }
 
 /* Digit Card - Clean, Flat, Generous Size */
@@ -341,18 +341,14 @@ body {
     position: relative;
     background-color: var(--card-bg);
     border: 1px solid var(--card-border);
-    border-radius: 10px;
-    padding: 4px;
+    border-radius: 12px;
+    padding: 6px;
     display: flex;
     justify-content: center;
     align-items: center;
     aspect-ratio: 1 / 1;
     flex-shrink: 0;
     transition: border-color 0.2s ease, transform 0.15s ease;
-}
-
-.digit-card:hover {
-    border-color: var(--card-border-hover);
 }
 
 .digit-card.digit-dimmed {
@@ -363,7 +359,7 @@ body {
     width: 100%;
     height: 100%;
     display: block;
-    border-radius: 6px;
+    border-radius: 8px;
 }
 
 /* LED Segment Polygons */
@@ -374,10 +370,6 @@ body {
     stroke-linejoin: round;
     cursor: pointer;
     transition: fill 0.18s ease, stroke 0.18s ease, filter 0.18s ease;
-}
-
-.led:hover:not(.active) {
-    fill: var(--led-off-hover);
 }
 
 .led.active {
@@ -429,19 +421,15 @@ body {
     position: relative;
     background-color: var(--slot-bg);
     border: 1px solid var(--slot-border);
-    border-radius: 6px;
+    border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: ns-resize;
     outline: none;
     overflow: hidden;
-    touch-action: pan-x;
+    touch-action: none;
     transition: border-color 0.2s ease;
-}
-
-.wheel-slot:hover {
-    border-color: var(--slot-border-hover);
 }
 
 .wheel-slot:focus-visible {
@@ -450,19 +438,23 @@ body {
 }
 
 .digit-slot {
-    width: 36px;
-    height: 60px;
+    width: 48px;
+    height: 76px;
 }
 
-.year-digit-slot,
+.year-digit-slot {
+    width: 38px;
+    height: 70px;
+}
+
 .day-digit-slot {
-    width: 26px;
-    height: 56px;
+    width: 40px;
+    height: 70px;
 }
 
 .month-slot {
-    width: 52px;
-    height: 56px;
+    width: 74px;
+    height: 70px;
 }
 
 /* Drum Cylinder Container & Faded Perspective Numbers */
@@ -492,16 +484,16 @@ body {
 }
 
 .wheel-item.pos-m2 {
-    transform: translateY(-24px);
+    transform: translateY(-30px);
     opacity: 0.12;
-    font-size: 0.72rem;
+    font-size: 0.80rem;
     color: var(--text-faint-more);
 }
 
 .wheel-item.pos-m1 {
-    transform: translateY(-13px);
+    transform: translateY(-16px);
     opacity: 0.38;
-    font-size: 0.84rem;
+    font-size: 0.95rem;
     font-weight: 500;
     color: var(--text-faint);
 }
@@ -509,28 +501,28 @@ body {
 .wheel-item.pos-0 {
     transform: translateY(0);
     opacity: 1;
-    font-size: 1.05rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--text-primary);
 }
 
 .wheel-item.pos-p1 {
-    transform: translateY(13px);
+    transform: translateY(16px);
     opacity: 0.38;
-    font-size: 0.84rem;
+    font-size: 0.95rem;
     font-weight: 500;
     color: var(--text-faint);
 }
 
 .wheel-item.pos-p2 {
-    transform: translateY(24px);
+    transform: translateY(30px);
     opacity: 0.12;
-    font-size: 0.72rem;
+    font-size: 0.80rem;
     color: var(--text-faint-more);
 }
 
 .month-slot .wheel-item.pos-0 {
-    font-size: 0.95rem;
+    font-size: 1.12rem;
     letter-spacing: 0.5px;
 }
 
@@ -580,8 +572,8 @@ body {
 
 /* Minimalist AD / BC Segmented Switch */
 .era-lever-module {
-    height: 56px;
-    width: 44px;
+    height: 70px;
+    width: 54px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -589,21 +581,18 @@ body {
     outline: none;
     user-select: none;
     flex-shrink: 0;
+    touch-action: none;
 }
 
 .era-switch-plate {
     width: 100%;
     height: 100%;
-    border-radius: 6px;
+    border-radius: 8px;
     background-color: var(--slot-bg);
     border: 1px solid var(--slot-border);
-    padding: 2px;
+    padding: 3px;
     display: flex;
     transition: border-color 0.2s ease;
-}
-
-.era-lever-module:hover .era-switch-plate {
-    border-color: var(--slot-border-hover);
 }
 
 .era-lever-module:focus-visible .era-switch-plate {
@@ -618,7 +607,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    gap: 2px;
+    gap: 3px;
 }
 
 .era-sector {
@@ -627,13 +616,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 4px;
+    border-radius: 5px;
     transition: background-color 0.15s ease;
 }
 
 .era-text {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.82rem;
     font-weight: 700;
     line-height: 1;
     color: var(--text-muted);
@@ -663,7 +652,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 6px 20px;
+    padding: 8px 24px;
     border-radius: 20px;
     background-color: var(--card-bg);
     border: 1px solid var(--card-border);
@@ -674,9 +663,9 @@ body {
 
 .weekday-value {
     font-family: var(--font-mono);
-    font-size: clamp(0.78rem, 1.6vw, 0.88rem);
+    font-size: clamp(0.88rem, 1.8vw, 1.05rem);
     font-weight: 700;
-    letter-spacing: 1.2px;
+    letter-spacing: 1.5px;
     color: var(--accent-cyan);
     text-transform: uppercase;
     transition: transform 0.2s ease, opacity 0.2s ease;
@@ -708,36 +697,82 @@ body.theme-light .era-sector-bc.active {
 @media (min-width: 641px) {
     .time-section {
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
-        gap: clamp(20px, 3.5vw, 36px);
+        gap: clamp(24px, 4.5vw, 52px);
     }
 
     /* Properly enlarged LEDs in frame */
     .digit-card {
-        width: clamp(100px, min(16vw, 19vh), 145px);
-        height: clamp(100px, min(16vw, 19vh), 145px);
+        width: clamp(120px, min(18vw, 22vh), 165px);
+        height: clamp(120px, min(18vw, 22vh), 165px);
+        border-radius: 12px;
+        padding: 6px;
     }
 
     .digit-slot {
-        width: clamp(34px, 4.2vw, 42px);
-        height: clamp(52px, 7.5vh, 62px);
+        width: clamp(46px, 5.5vw, 60px);
+        height: clamp(72px, 10vh, 90px);
     }
 
-    .year-digit-slot,
+    .year-digit-slot {
+        width: clamp(36px, 4.2vw, 46px);
+        height: clamp(66px, 8.5vh, 80px);
+    }
+
     .day-digit-slot {
-        width: clamp(24px, 3vw, 28px);
-        height: clamp(48px, 6.5vh, 56px);
+        width: clamp(38px, 4.5vw, 48px);
+        height: clamp(66px, 8.5vh, 80px);
     }
 
     .month-slot {
-        width: clamp(46px, 5.5vw, 54px);
-        height: clamp(48px, 6.5vh, 56px);
+        width: clamp(70px, 8.5vw, 92px);
+        height: clamp(66px, 8.5vh, 80px);
     }
 
     .era-lever-module {
-        width: clamp(40px, 4.8vw, 46px);
-        height: clamp(48px, 6.5vh, 56px);
+        width: clamp(52px, 5.8vw, 64px);
+        height: clamp(66px, 8.5vh, 80px);
+    }
+
+    .wheels-row.date-deck {
+        gap: clamp(8px, 1.2vw, 14px);
+    }
+
+    .wheel-group {
+        gap: clamp(3px, 0.5vw, 6px);
+    }
+
+    .wheel-item.pos-m2 {
+        transform: translateY(-34px);
+        font-size: 0.88rem;
+    }
+
+    .wheel-item.pos-m1 {
+        transform: translateY(-18px);
+        font-size: 1.05rem;
+    }
+
+    .wheel-item.pos-0 {
+        font-size: 1.4rem;
+    }
+
+    .wheel-item.pos-p1 {
+        transform: translateY(18px);
+        font-size: 1.05rem;
+    }
+
+    .wheel-item.pos-p2 {
+        transform: translateY(34px);
+        font-size: 0.88rem;
+    }
+
+    .month-slot .wheel-item.pos-0 {
+        font-size: 1.22rem;
+    }
+
+    .weekday-full-pod {
+        padding: clamp(8px, 1.2vh, 10px) clamp(24px, 3.5vw, 36px);
     }
 }
 
@@ -755,7 +790,7 @@ body.theme-light .era-sector-bc.active {
 
     .display-panel {
         padding: var(--space-sm);
-        gap: var(--space-sm);
+        gap: clamp(10px, 1.8vh, 16px);
     }
 
     .time-section {
@@ -767,8 +802,10 @@ body.theme-light .era-sector-bc.active {
 
     /* Properly sized LEDs for mobile frame */
     .digit-card {
-        width: clamp(72px, min(24vw, 12vh), 105px);
-        height: clamp(72px, min(24vw, 12vh), 105px);
+        width: clamp(90px, min(36vw, 16vh), 130px);
+        height: clamp(90px, min(36vw, 16vh), 130px);
+        border-radius: 10px;
+        padding: 5px;
     }
 
     .time-wheels-stacked {
@@ -777,65 +814,138 @@ body.theme-light .era-sector-bc.active {
     }
 
     .digit-slot {
-        width: 32px;
-        height: 48px;
+        width: clamp(40px, 10vw, 50px);
+        height: clamp(64px, 8.5vh, 74px);
     }
 
-    .year-digit-slot,
+    .year-digit-slot {
+        width: clamp(30px, 7.5vw, 36px);
+        height: clamp(60px, 7.8vh, 68px);
+    }
+
     .day-digit-slot {
-        width: 22px;
-        height: 46px;
+        width: clamp(32px, 8vw, 38px);
+        height: clamp(60px, 7.8vh, 68px);
     }
 
     .month-slot {
-        width: 42px;
-        height: 46px;
+        width: clamp(56px, 13.5vw, 68px);
+        height: clamp(60px, 7.8vh, 68px);
     }
 
     .era-lever-module {
-        width: 36px;
-        height: 46px;
+        width: clamp(42px, 9.5vw, 50px);
+        height: clamp(60px, 7.8vh, 68px);
     }
 
     .wheels-row.date-deck {
-        gap: 4px;
+        gap: 6px;
     }
 
     .wheel-group {
-        gap: 2px;
+        gap: 3px;
+    }
+
+    .wheel-item.pos-m2 {
+        transform: translateY(-28px);
+        font-size: 0.78rem;
+    }
+
+    .wheel-item.pos-m1 {
+        transform: translateY(-15px);
+        font-size: 0.92rem;
+    }
+
+    .wheel-item.pos-0 {
+        font-size: 1.2rem;
+    }
+
+    .wheel-item.pos-p1 {
+        transform: translateY(15px);
+        font-size: 0.92rem;
+    }
+
+    .wheel-item.pos-p2 {
+        transform: translateY(28px);
+        font-size: 0.78rem;
+    }
+
+    .month-slot .wheel-item.pos-0 {
+        font-size: 1.05rem;
     }
 
     .weekday-full-pod {
-        padding: 4px 14px;
+        padding: 6px 20px;
     }
 }
 
 /* Compact Mobile (<= 380px) */
 @media (max-width: 380px) {
     .digit-card {
-        width: clamp(60px, 22vw, 75px);
-        height: clamp(60px, 22vw, 75px);
+        width: clamp(76px, 38vw, 100px);
+        height: clamp(76px, 38vw, 100px);
+        padding: 4px;
     }
 
     .digit-slot {
-        width: 26px;
-        height: 42px;
+        width: 36px;
+        height: 60px;
     }
 
-    .year-digit-slot,
+    .year-digit-slot {
+        width: 26px;
+        height: 54px;
+    }
+
     .day-digit-slot {
-        width: 18px;
-        height: 40px;
+        width: 28px;
+        height: 54px;
     }
 
     .month-slot {
-        width: 36px;
-        height: 40px;
+        width: 48px;
+        height: 54px;
     }
 
     .era-lever-module {
-        width: 30px;
-        height: 40px;
+        width: 36px;
+        height: 54px;
+    }
+
+    .wheels-row.date-deck {
+        gap: 3px;
+    }
+
+    .wheel-group {
+        gap: 2px;
+    }
+
+    .wheel-item.pos-m2 {
+        transform: translateY(-24px);
+        font-size: 0.72rem;
+    }
+
+    .wheel-item.pos-m1 {
+        transform: translateY(-13px);
+        font-size: 0.84rem;
+    }
+
+    .wheel-item.pos-0 {
+        font-size: 1.08rem;
+    }
+
+    .wheel-item.pos-p1 {
+        transform: translateY(13px);
+        font-size: 0.84rem;
+    }
+
+    .wheel-item.pos-p2 {
+        transform: translateY(24px);
+        font-size: 0.72rem;
+    }
+
+    .month-slot .wheel-item.pos-0 {
+        font-size: 0.95rem;
     }
 
     .bar-btn {
