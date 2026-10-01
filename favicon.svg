@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Top LED (active ruby glow) -->
+  <polygon points="18,18 82,18 50,50" fill="#ff1853" filter="url(#neonGlow)"/>
+  <!-- Bottom LED (active ruby glow) -->
+  <polygon points="82,82 18,82 50,50" fill="#ff1853" filter="url(#neonGlow)"/>
+  <!-- Right LED (off metallic steel facet) -->
+  <polygon points="82,18 82,82 50,50" fill="rgba(140, 155, 180, 0.18)" stroke="#4a5264" stroke-width="4"/>
+  <!-- Left LED (off metallic steel facet) -->
+  <polygon points="18,82 18,18 50,50" fill="rgba(140,155,180,0)" stroke="#4a5264" stroke-width="4"/>
+  </svg>

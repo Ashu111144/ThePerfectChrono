@@ -1,0 +1,845 @@
+/* ========================================================
+   THE PERFECT CHRONO - MINIMALIST SEGMENTAL CHRONOMETER
+   Key Design Principles:
+   - Extremely simple, clean, minimalist modern horology UI
+   - Zero unnecessary styling: no fake textures, bevels, or skeuomorphic clutter
+   - Uniform, balanced spacing throughout the entire layout
+   - Prominently sized LED displays properly filling the chassis frame
+   - Seamless responsive zero-scroll viewport fitting
+   - Full dark and light theme support
+   ======================================================== */
+
+/* ========================================================
+   1. DESIGN TOKENS - DARK MODE (DEFAULT)
+   ======================================================== */
+:root {
+    --bg-page: #080a0f;
+    --chassis-bg: #11141c;
+    --chassis-border: #1e2533;
+    --chassis-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.7);
+
+    --panel-bg: #0b0d14;
+    --panel-border: #181f2b;
+
+    --card-bg: #141822;
+    --card-border: #222a3a;
+    --card-border-hover: #ff1853;
+
+    --slot-bg: #121620;
+    --slot-border: #1e2534;
+    --slot-border-hover: #00e5ff;
+
+    --btn-bg: #161b26;
+    --btn-border: #242c3d;
+    --btn-border-hover: #00e5ff;
+    --btn-icon: #cbd5e1;
+
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #475569;
+    --text-faint: rgba(248, 250, 252, 0.35);
+    --text-faint-more: rgba(248, 250, 252, 0.12);
+
+    /* LED Segment Illumination */
+    --led-off: #131722;
+    --led-off-hover: #221a24;
+    --led-stroke: #0c0f17;
+    --led-on: #ff1853;
+    --led-glow: drop-shadow(0 0 6px rgba(255, 24, 83, 0.65));
+    --led-jewel: #090c13;
+
+    /* Accents */
+    --accent-cyan: #00e5ff;
+    --accent-green: #10b981;
+    --accent-amber: #f59e0b;
+
+    /* Spacing Units */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 14px;
+    --space-lg: 20px;
+
+    /* Typography */
+    --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'Space Mono', monospace;
+}
+
+/* ========================================================
+   2. DESIGN TOKENS - LIGHT MODE
+   ======================================================== */
+body.theme-light {
+    --bg-page: #eef2f6;
+    --chassis-bg: #ffffff;
+    --chassis-border: #cbd5e1;
+    --chassis-shadow: 0 16px 36px -10px rgba(15, 23, 42, 0.12);
+
+    --panel-bg: #f8fafc;
+    --panel-border: #e2e8f0;
+
+    --card-bg: #ffffff;
+    --card-border: #cbd5e1;
+    --card-border-hover: #dc2626;
+
+    --slot-bg: #ffffff;
+    --slot-border: #cbd5e1;
+    --slot-border-hover: #0284c7;
+
+    --btn-bg: #ffffff;
+    --btn-border: #cbd5e1;
+    --btn-border-hover: #0284c7;
+    --btn-icon: #334155;
+
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --text-faint: rgba(15, 23, 42, 0.38);
+    --text-faint-more: rgba(15, 23, 42, 0.14);
+
+    --led-off: #e2e8f0;
+    --led-off-hover: #fed7aa;
+    --led-stroke: #cbd5e1;
+    --led-on: #dc2626;
+    --led-glow: drop-shadow(0 0 5px rgba(220, 38, 38, 0.5));
+    --led-jewel: #cbd5e1;
+
+    --accent-cyan: #0284c7;
+    --accent-green: #059669;
+    --accent-amber: #d97706;
+}
+
+/* ========================================================
+   3. BASE RESETS & VIEWPORT FIT (ZERO SITE SCROLL)
+   ======================================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    width: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-page);
+    font-family: var(--font-main);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(6px, 1.5vh, 16px);
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ========================================================
+   4. WATCH CHASSIS (MAIN CONTAINER)
+   ======================================================== */
+.watch-chassis {
+    width: 100%;
+    max-width: min(840px, 96vw);
+    height: 100%;
+    max-height: 100dvh;
+    background-color: var(--chassis-bg);
+    border: 1px solid var(--chassis-border);
+    border-radius: 16px;
+    box-shadow: var(--chassis-shadow);
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    user-select: none;
+    overflow: hidden;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+/* ========================================================
+   5. TOP CONTROL BAR
+   ======================================================== */
+.watch-top-bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+}
+
+.top-brand-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+}
+
+.top-title-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 0;
+}
+
+.watch-title {
+    font-size: clamp(0.75rem, 2vw, 0.95rem);
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.top-controls-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+}
+
+/* Minimalist Circular Buttons */
+.bar-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: var(--btn-bg);
+    border: 1px solid var(--btn-border);
+    color: var(--btn-icon);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    transition: border-color 0.2s ease, transform 0.15s ease, background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.bar-btn:hover {
+    border-color: var(--btn-border-hover);
+    transform: scale(1.05);
+}
+
+.bar-btn:active {
+    transform: scale(0.95);
+}
+
+.bar-btn:focus-visible {
+    outline: 2px solid var(--accent-cyan);
+    outline-offset: 1px;
+}
+
+.brand-icon-svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.5s ease;
+}
+
+.bar-btn.spinning .brand-icon-svg {
+    transform: rotate(360deg);
+}
+
+.sound-icon-container,
+.theme-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sound-icon-svg,
+.theme-icon-svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Minimal Live Status Indicator Dot */
+.live-pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--accent-green);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.live-pulse-dot:hover {
+    transform: scale(1.3);
+}
+
+.live-pulse-dot.scrubbed {
+    background-color: var(--accent-amber);
+    animation: livePulse 1.4s infinite ease-in-out;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.85); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* ========================================================
+   6. MAIN DISPLAY PANEL
+   ======================================================== */
+.display-panel {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    background-color: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: var(--space-md);
+    min-height: 0;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+/* ========================================================
+   7. UPPER TIME SECTION: LED MATRIX & TIME WHEELS
+   ======================================================== */
+.time-section {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    flex: 1;
+    min-height: 0;
+}
+
+/* 4-LED Matrix Deck */
+.led-matrix-deck {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    flex: 1;
+    min-height: 0;
+}
+
+.led-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+/* Digit Card - Clean, Flat, Generous Size */
+.digit-card {
+    position: relative;
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+    transition: border-color 0.2s ease, transform 0.15s ease;
+}
+
+.digit-card:hover {
+    border-color: var(--card-border-hover);
+}
+
+.digit-card.digit-dimmed {
+    opacity: 0.3;
+}
+
+.digit-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 6px;
+}
+
+/* LED Segment Polygons */
+.led {
+    fill: var(--led-off);
+    stroke: var(--led-stroke);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    cursor: pointer;
+    transition: fill 0.18s ease, stroke 0.18s ease, filter 0.18s ease;
+}
+
+.led:hover:not(.active) {
+    fill: var(--led-off-hover);
+}
+
+.led.active {
+    fill: var(--led-on);
+    stroke: var(--led-on);
+    filter: var(--led-glow);
+}
+
+.led-center-jewel {
+    fill: var(--led-jewel);
+    pointer-events: none;
+}
+
+.led.just-tapped {
+    animation: ledTapAnim 0.25s ease-out;
+}
+
+@keyframes ledTapAnim {
+    0% { filter: brightness(1.8) drop-shadow(0 0 10px var(--led-on)); }
+    100% { filter: var(--led-glow); }
+}
+
+/* Stacked Time Scroll Wheels on Right */
+.time-wheels-stacked {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+}
+
+.time-stack-row {
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.stack-wheels-pair {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+/* ========================================================
+   8. MINIMALIST SCROLL WHEEL SLOTS
+   ======================================================== */
+.wheel-slot {
+    position: relative;
+    background-color: var(--slot-bg);
+    border: 1px solid var(--slot-border);
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: ns-resize;
+    outline: none;
+    overflow: hidden;
+    touch-action: pan-x;
+    transition: border-color 0.2s ease;
+}
+
+.wheel-slot:hover {
+    border-color: var(--slot-border-hover);
+}
+
+.wheel-slot:focus-visible {
+    outline: 2px solid var(--accent-cyan);
+    outline-offset: 1px;
+}
+
+.digit-slot {
+    width: 36px;
+    height: 60px;
+}
+
+.year-digit-slot,
+.day-digit-slot {
+    width: 26px;
+    height: 56px;
+}
+
+.month-slot {
+    width: 52px;
+    height: 56px;
+}
+
+/* Drum Cylinder Container & Faded Perspective Numbers */
+.wheel-cylinder {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+}
+
+.wheel-item {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-mono);
+    text-align: center;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 0.15s ease-out, opacity 0.15s ease-out;
+}
+
+.wheel-item.pos-m2 {
+    transform: translateY(-24px);
+    opacity: 0.12;
+    font-size: 0.72rem;
+    color: var(--text-faint-more);
+}
+
+.wheel-item.pos-m1 {
+    transform: translateY(-13px);
+    opacity: 0.38;
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: var(--text-faint);
+}
+
+.wheel-item.pos-0 {
+    transform: translateY(0);
+    opacity: 1;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.wheel-item.pos-p1 {
+    transform: translateY(13px);
+    opacity: 0.38;
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: var(--text-faint);
+}
+
+.wheel-item.pos-p2 {
+    transform: translateY(24px);
+    opacity: 0.12;
+    font-size: 0.72rem;
+    color: var(--text-faint-more);
+}
+
+.month-slot .wheel-item.pos-0 {
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+}
+
+.wheel-item.disabled {
+    pointer-events: none;
+    opacity: 0;
+}
+
+/* Mechanical Limit Stop Bump */
+@keyframes limitStopBump {
+    0% { transform: translateY(0); }
+    35% { transform: translateY(var(--bump-dir, 3px)); }
+    100% { transform: translateY(0); }
+}
+
+.wheel-slot.limit-hit-anim {
+    animation: limitStopBump 0.15s ease;
+}
+
+@keyframes drumStep {
+    0% { transform: scale(0.97); }
+    100% { transform: scale(1); }
+}
+
+.wheel-slot.drum-anim .wheel-cylinder {
+    animation: drumStep 0.15s ease;
+}
+
+/* ========================================================
+   9. DATE COMPLICATIONS DECK (HORIZONTAL ROW)
+   ======================================================== */
+.wheels-row.date-deck {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    width: 100%;
+    margin: 0 auto;
+    flex-shrink: 0;
+}
+
+.wheel-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+/* Minimalist AD / BC Segmented Switch */
+.era-lever-module {
+    height: 56px;
+    width: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.era-switch-plate {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+    background-color: var(--slot-bg);
+    border: 1px solid var(--slot-border);
+    padding: 2px;
+    display: flex;
+    transition: border-color 0.2s ease;
+}
+
+.era-lever-module:hover .era-switch-plate {
+    border-color: var(--slot-border-hover);
+}
+
+.era-lever-module:focus-visible .era-switch-plate {
+    outline: 2px solid var(--accent-cyan);
+    outline-offset: 1px;
+}
+
+.era-rocker {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2px;
+}
+
+.era-sector {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    transition: background-color 0.15s ease;
+}
+
+.era-text {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text-muted);
+    transition: color 0.15s ease;
+}
+
+.era-sector-ad.active {
+    background-color: rgba(0, 229, 255, 0.12);
+}
+
+.era-sector-ad.active .era-text {
+    color: var(--accent-cyan);
+}
+
+.era-sector-bc.active {
+    background-color: rgba(245, 158, 11, 0.12);
+}
+
+.era-sector-bc.active .era-text {
+    color: var(--accent-amber);
+}
+
+/* ========================================================
+   10. WEEKDAY COMPLICATION POD
+   ======================================================== */
+.weekday-full-pod {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 20px;
+    border-radius: 20px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    width: fit-content;
+    margin: 0 auto;
+    flex-shrink: 0;
+}
+
+.weekday-value {
+    font-family: var(--font-mono);
+    font-size: clamp(0.78rem, 1.6vw, 0.88rem);
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: var(--accent-cyan);
+    text-transform: uppercase;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.weekday-full-pod.updating .weekday-value {
+    animation: weekdayPulse 0.25s ease;
+}
+
+@keyframes weekdayPulse {
+    0% { transform: scale(0.92); opacity: 0.6; }
+    50% { transform: scale(1.08); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+body.theme-light .era-sector-ad.active {
+    background-color: rgba(2, 132, 199, 0.12);
+}
+
+body.theme-light .era-sector-bc.active {
+    background-color: rgba(217, 119, 6, 0.12);
+}
+
+/* ========================================================
+   11. RESPONSIVE LAYOUT & INCREASED LED SIZING
+   ======================================================== */
+
+/* Desktop & Medium Viewports (> 640px) */
+@media (min-width: 641px) {
+    .time-section {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: clamp(20px, 3.5vw, 36px);
+    }
+
+    /* Properly enlarged LEDs in frame */
+    .digit-card {
+        width: clamp(100px, min(16vw, 19vh), 145px);
+        height: clamp(100px, min(16vw, 19vh), 145px);
+    }
+
+    .digit-slot {
+        width: clamp(34px, 4.2vw, 42px);
+        height: clamp(52px, 7.5vh, 62px);
+    }
+
+    .year-digit-slot,
+    .day-digit-slot {
+        width: clamp(24px, 3vw, 28px);
+        height: clamp(48px, 6.5vh, 56px);
+    }
+
+    .month-slot {
+        width: clamp(46px, 5.5vw, 54px);
+        height: clamp(48px, 6.5vh, 56px);
+    }
+
+    .era-lever-module {
+        width: clamp(40px, 4.8vw, 46px);
+        height: clamp(48px, 6.5vh, 56px);
+    }
+}
+
+/* Mobile Viewports (<= 640px) */
+@media (max-width: 640px) {
+    body {
+        padding: clamp(4px, 1vh, 8px);
+    }
+
+    .watch-chassis {
+        padding: var(--space-sm);
+        gap: var(--space-sm);
+        border-radius: 12px;
+    }
+
+    .display-panel {
+        padding: var(--space-sm);
+        gap: var(--space-sm);
+    }
+
+    .time-section {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--space-sm);
+    }
+
+    /* Properly sized LEDs for mobile frame */
+    .digit-card {
+        width: clamp(72px, min(24vw, 12vh), 105px);
+        height: clamp(72px, min(24vw, 12vh), 105px);
+    }
+
+    .time-wheels-stacked {
+        flex-direction: row;
+        gap: var(--space-md);
+    }
+
+    .digit-slot {
+        width: 32px;
+        height: 48px;
+    }
+
+    .year-digit-slot,
+    .day-digit-slot {
+        width: 22px;
+        height: 46px;
+    }
+
+    .month-slot {
+        width: 42px;
+        height: 46px;
+    }
+
+    .era-lever-module {
+        width: 36px;
+        height: 46px;
+    }
+
+    .wheels-row.date-deck {
+        gap: 4px;
+    }
+
+    .wheel-group {
+        gap: 2px;
+    }
+
+    .weekday-full-pod {
+        padding: 4px 14px;
+    }
+}
+
+/* Compact Mobile (<= 380px) */
+@media (max-width: 380px) {
+    .digit-card {
+        width: clamp(60px, 22vw, 75px);
+        height: clamp(60px, 22vw, 75px);
+    }
+
+    .digit-slot {
+        width: 26px;
+        height: 42px;
+    }
+
+    .year-digit-slot,
+    .day-digit-slot {
+        width: 18px;
+        height: 40px;
+    }
+
+    .month-slot {
+        width: 36px;
+        height: 40px;
+    }
+
+    .era-lever-module {
+        width: 30px;
+        height: 40px;
+    }
+
+    .bar-btn {
+        width: 30px;
+        height: 30px;
+    }
+}
