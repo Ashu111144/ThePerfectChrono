@@ -1,2 +1,0 @@
-# ThePerfectChrono
-The Perfect Chrono
